@@ -61,6 +61,7 @@ for train_set, test_set in stratified.split(term_deposits, term_deposits["loan"]
 
 # Separate the labels and the features
 train_data = stratified_train
+
 # Make a copy of the stratified training set
 test_data = stratified_test
 train_data.shape
@@ -113,6 +114,3 @@ print("Gradient Boost Classifier accuracy is %2.2f" %
 
 # Save the model to file
 joblib.dump(grad_clf, CURRENT_DIR / 'gradient_boosting_classifier.pkl')
-
-# Load the model
-clf = joblib.load('gradient_boosting_classifier.pkl')
