@@ -112,7 +112,7 @@ print("Gradient Boost Classifier accuracy is %2.2f" %
       accuracy_score(y_train, y_train_pred))
 
 # Save the model to file
-joblib.dump(grad_clf, 'gradient_boosting_classifier.pkl')
+joblib.dump(grad_clf, CURRENT_DIR / 'gradient_boosting_classifier.pkl')
 
 # Load the model
 clf = joblib.load('gradient_boosting_classifier.pkl')
