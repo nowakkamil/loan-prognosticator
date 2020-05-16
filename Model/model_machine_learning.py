@@ -61,6 +61,7 @@ for train_set, test_set in stratified.split(term_deposits, term_deposits["loan"]
 
 # Separate the labels and the features
 train_data = stratified_train
+
 # Make a copy of the stratified training set
 test_data = stratified_test
 train_data.shape
@@ -86,8 +87,12 @@ preprocess_pipeline = FeatureUnion(transformer_list=[
     ("numerical_pipeline", numerical_pipeline),
     ("categorical_pipeline", categorical_pipeline),
 ])
-X_train = preprocess_pipeline.fit_transform(train_data)
-X_train
+preprocess_pipeline = preprocess_pipeline.fit(train_data)
+
+X_train = preprocess_pipeline.transform(train_data)
+
+# Save the pipeline to file
+joblib.dump(preprocess_pipeline, CURRENT_DIR / 'transform_pipeline.pkl')
 
 y_train = train_data['deposit']
 y_test = test_data['deposit']
@@ -113,6 +118,3 @@ print("Gradient Boost Classifier accuracy is %2.2f" %
 
 # Save the model to file
 joblib.dump(grad_clf, CURRENT_DIR / 'gradient_boosting_classifier.pkl')
-
-# Load the model
-clf = joblib.load('gradient_boosting_classifier.pkl')
