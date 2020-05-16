@@ -12,14 +12,19 @@ import pandas as pd
 
 CURRENT_DIR = Path(__file__).parent.absolute()
 FULL_PATH = CURRENT_DIR / 'gradient_boosting_classifier.pkl'
+PIPELINE_PATH = CURRENT_DIR / 'transform_pipeline.pkl'
 
 # Load the model
 model = joblib.load(FULL_PATH)
 
+# Load the pipeline
+preprocess_pipeline = joblib.load(PIPELINE_PATH)
+
 # Test data
+# [34, "technician", "married", "secondary", "no", 1026, "no", "no", "cellular", 12, "nov", 319, 1, 100, 6, "failure"]
 # Expected output: "no"
-test_data = [34, "technician", "married", "secondary", "no", 1026,
-             "no", "no", "cellular", 12, "nov", 319, 1, 100, 6, "failure"]
+# [34, "technician", "married", "secondary", "no", 133, "no", "no", "cellular", 15, "nov", 401, 2, 187, 6, "success"]
+# Expected output: "yes"
 
 columns = ["age",
            "job",
@@ -38,49 +43,32 @@ columns = ["age",
            "previous",
            "poutcome"]
 
-data = {"age": [34],
-        "job": ["technician"],
-        "marital": ["married"],
-        "education": ["secondary"],
-        "default": ["no"],
-        "balance": [1026],
-        "housing": ["no"],
-        "loan": ["no"],
-        "contact": ["cellular"],
-        "day": [12],
-        "month": ["nov"],
-        "duration": [319],
-        "campaign": [1],
-        "pdays": [100],
-        "previous": [6],
-        "poutcome": ["failure"]}
-
+data = {"age": [34, 34],
+        "job": ["technician", "technician"],
+        "marital": ["married", "married"],
+        "education": ["secondary", "secondary"],
+        "default": ["no", "no"],
+        "balance": [1026, 133],
+        "housing": ["no", "no"],
+        "loan": ["no", "no"],
+        "contact": ["cellular", "cellular"],
+        "day": [12, 15],
+        "month": ["nov", "nov"],
+        "duration": [319, 401],
+        "campaign": [1, 2],
+        "pdays": [100, 187],
+        "previous": [6, 6],
+        "poutcome": ["failure", "success"]}
 
 # Create the pandas DataFrame
 df = pd.DataFrame(data, columns=columns)
-
 print(df)
 
-# Pipelines definition
-numerical_pipeline = Pipeline([
-    ("select_numeric", DataFrameSelector(
-        ["age", "balance", "day", "campaign", "pdays", "previous", "duration"])),
-    ("std_scaler", StandardScaler()),
-])
-
-categorical_pipeline = Pipeline([
-    ("select_cat", DataFrameSelector(["job", "education", "marital", "default", "housing", "loan", "contact", "month",
-                                      "poutcome"])),
-    ("cat_encoder", CategoricalEncoder(encoding='onehot-dense'))
-])
-
-preprocess_pipeline = FeatureUnion(transformer_list=[
-    ("numerical_pipeline", numerical_pipeline),
-    ("categorical_pipeline", categorical_pipeline),
-])
-
-X_test = preprocess_pipeline.fit_transform(df)
+X_test = preprocess_pipeline.transform(df)
 print(X_test)
 
 output = model.predict(X_test)
 print(output)
+
+formatted_output = ["no" if x == 0 else "yes" for x in output]
+print(formatted_output)
