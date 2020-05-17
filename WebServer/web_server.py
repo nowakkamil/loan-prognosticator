@@ -7,10 +7,12 @@ from sklearn.externals import joblib
 import importlib
 import sys
 import json
+import pandas as pd
+
 
 # Import python file with relative path
 DATA_FRAME_SELECTOR_PATH = Path(
-    __file__).parent.absolute().parents[0] / "Model"
+    __file__).parent.absolute().parents[0] / 'Model'
 sys.path.append(str(DATA_FRAME_SELECTOR_PATH))
 importlib.import_module('data_frame_selector', 'DataFrameSelector')
 
@@ -26,8 +28,43 @@ model = joblib.load(MODEL_PATH)
 preprocess_pipeline = joblib.load(PIPELINE_PATH)
 
 # Define validation rules
-schema = {'age': {'type': 'integer'}}
+schema = {
+    'age': {'type': 'integer'},
+    'job': {'type': 'string'},
+    'marital': {'type': 'string'},
+    'education': {'type': 'string'},
+    'default': {'type': 'string'},
+    'balance': {'type': 'integer'},
+    'housing': {'type': 'string'},
+    'loan': {'type': 'string'},
+    'contact': {'type': 'string'},
+    'day': {'type': 'integer'},
+    'month': {'type': 'string'},
+    'duration': {'type': 'integer'},
+    'campaign': {'type': 'integer'},
+    'pdays': {'type': 'integer'},
+    'previous': {'type': 'integer'},
+    'poutcome': {'type': 'string'}
+}
 validator = Validator(schema)
+
+# DataFrame column definition
+columns = ["age",
+           "job",
+           "marital",
+           "education",
+           "default",
+           "balance",
+           "housing",
+           "loan",
+           "contact",
+           "day",
+           "month",
+           "duration",
+           "campaign",
+           "pdays",
+           "previous",
+           "poutcome"]
 
 # Flask app
 app = Flask(__name__)
@@ -36,13 +73,22 @@ api = Api(app)
 
 class WebServer(Resource):
     def post(self):
-        data = request.get_json()
-        print('Payload:\n' + json.dumps(data, indent=4))
+        payload = request.get_json()
+        print('Payload:\n' + json.dumps(payload, indent=4) + '\n')
 
-        if not validator.validate(data):
+        if not validator.validate(payload):
             return validator.errors, 400
 
-        return jsonify(outcome=True)
+        data = dict.fromkeys(payload)
+        for k, v in payload.items():
+            data[k] = [v]
+
+        df = pd.DataFrame(data, columns=columns)
+        model_input = preprocess_pipeline.transform(df)
+        model_output = model.predict(model_input)
+        outcome = bool(model_output)
+
+        return jsonify(outcome=outcome)
 
 
 api.add_resource(WebServer, '/')
