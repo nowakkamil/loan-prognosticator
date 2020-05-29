@@ -2,7 +2,8 @@ from flask import Flask, request, jsonify
 from flask_restful import Resource, Api
 from cerberus import Validator
 from pathlib import Path
-from sklearn.externals import joblib
+import sklearn
+import joblib
 
 import importlib
 import sys

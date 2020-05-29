@@ -28,6 +28,7 @@ class Form extends Component {
     'job: ' + this.state.answer.parameters['job']
     );
 
+    console.log("Tutaj");
     this.state.answer.submit_answer();
 
     event.preventDefault();
