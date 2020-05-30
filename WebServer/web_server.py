@@ -17,18 +17,29 @@ DATA_FRAME_SELECTOR_PATH = Path(
 sys.path.append(str(DATA_FRAME_SELECTOR_PATH))
 importlib.import_module('data_frame_selector', 'DataFrameSelector')
 
-# Define paths to files
+# Define paths to files: pipelines and models for all attributes
+# as well as bank data attributes only
 CURRENT_DIR = Path(__file__).parent.absolute().parents[0]
-MODEL_PATH = CURRENT_DIR / 'Model' / 'gradient_boosting_classifier.pkl'
-PIPELINE_PATH = CURRENT_DIR / 'Model' / 'transform_pipeline.pkl'
+# Model trained with all attributes
+MODEL_ALL_PATH = CURRENT_DIR / 'Model' / \
+    'model' / 'gradient_boosting_classifier_all.pkl'
+PIPELINE_ALL_PATH = CURRENT_DIR / 'Model' / 'pipeline' / \
+    'transform_pipeline_all.pkl'
+# Model trained with bank data attributes only
+MODEL_BANK_DATA_PATH = CURRENT_DIR / 'Model' / \
+    'model' / 'gradient_boosting_classifier_bank_data.pkl'
+PIPELINE_BANK_DATA_PATH = CURRENT_DIR / 'Model' / 'pipeline' / \
+    'transform_pipeline_bank_data.pkl'
 
-# Load the model
-model = joblib.load(MODEL_PATH)
+# Load the models
+model_all = joblib.load(MODEL_ALL_PATH)
+model_bank_data = joblib.load(MODEL_BANK_DATA_PATH)
 
-# Load the pipeline
-preprocess_pipeline = joblib.load(PIPELINE_PATH)
+# Load the pipelines
+preprocess_pipeline_all = joblib.load(PIPELINE_ALL_PATH)
+preprocess_pipeline_bank_data = joblib.load(PIPELINE_BANK_DATA_PATH)
 
-# Define validation rules
+# Define schema for validation rules and DataFrame definition
 schema = {
     'age': {'type': 'integer'},
     'job': {'type': 'string'},
@@ -48,24 +59,6 @@ schema = {
     'poutcome': {'type': 'string'}
 }
 validator = Validator(schema)
-
-# DataFrame column definition
-columns = ["age",
-           "job",
-           "marital",
-           "education",
-           "default",
-           "balance",
-           "housing",
-           "loan",
-           "contact",
-           "day",
-           "month",
-           "duration",
-           "campaign",
-           "pdays",
-           "previous",
-           "poutcome"]
 
 # Flask app
 app = Flask(__name__)
@@ -87,9 +80,16 @@ class WebServer(Resource):
         for k, v in payload.items():
             data[k] = [v]
 
-        df = pd.DataFrame(data, columns=columns)
-        model_input = preprocess_pipeline.transform(df)
-        model_output = model.predict(model_input)
+        df = pd.DataFrame(data, columns=schema.keys())
+
+        bank_data_only = request.args.get("bank_data_only")
+        if bank_data_only is None:
+            model_input = preprocess_pipeline_all.transform(df)
+            model_output = model_all.predict(model_input)
+        else:
+            model_input = preprocess_pipeline_bank_data.transform(df)
+            model_output = model_bank_data.predict(model_input)
+
         outcome = bool(model_output)
 
         return jsonify(outcome=outcome)
