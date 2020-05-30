@@ -1,11 +1,12 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS, cross_origin
 from flask_restful import Resource, Api
 from cerberus import Validator
 from pathlib import Path
-from sklearn.externals import joblib
 
 import importlib
 import sys
+import joblib
 import json
 import pandas as pd
 
@@ -68,10 +69,13 @@ columns = ["age",
 
 # Flask app
 app = Flask(__name__)
+app.config['CORS_HEADERS'] = 'Content-Type'
+cors = CORS(app)
 api = Api(app)
 
 
 class WebServer(Resource):
+    @cross_origin()
     def post(self):
         payload = request.get_json()
         print('Payload:\n' + json.dumps(payload, indent=4) + '\n')
@@ -89,6 +93,13 @@ class WebServer(Resource):
         outcome = bool(model_output)
 
         return jsonify(outcome=outcome)
+
+    @app.after_request
+    def after_request(response):
+        header = response.headers
+        header['Access-Control-Allow-Origin'] = '*'
+
+        return response
 
 
 api.add_resource(WebServer, '/')
