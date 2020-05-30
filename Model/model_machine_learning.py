@@ -32,6 +32,7 @@ from categorical_encoder import CategoricalEncoder
 from data_frame_selector import DataFrameSelector
 
 import pandas as pd
+import constants
 
 
 CURRENT_DIR = Path(__file__).parent.absolute()
@@ -70,51 +71,60 @@ train_data['deposit'].value_counts()
 
 train_data.info()
 
-# Pipelines definition
-numerical_pipeline = Pipeline([
-    ("select_numeric", DataFrameSelector(
-        ["age", "balance", "day", "campaign", "pdays", "previous", "duration"])),
-    ("std_scaler", StandardScaler()),
-])
 
-categorical_pipeline = Pipeline([
-    ("select_cat", DataFrameSelector(["job", "education", "marital", "default", "housing", "loan", "contact", "month",
-                                      "poutcome"])),
-    ("cat_encoder", CategoricalEncoder(encoding='onehot-dense'))
-])
+def train_model_with_given_attibutes(attributes_type):
+    # Pipelines definition
+    numerical_pipeline = Pipeline([
+        ("select_numeric", DataFrameSelector(
+            constants.attributes[attributes_type][constants.numerical])),
+        ("std_scaler", StandardScaler()),
+    ])
 
-preprocess_pipeline = FeatureUnion(transformer_list=[
-    ("numerical_pipeline", numerical_pipeline),
-    ("categorical_pipeline", categorical_pipeline),
-])
-preprocess_pipeline = preprocess_pipeline.fit(train_data)
+    categorical_pipeline = Pipeline([
+        ("select_cat", DataFrameSelector(
+            constants.attributes[attributes_type][constants.categorical])),
+        ("cat_encoder", CategoricalEncoder(encoding='onehot-dense'))
+    ])
 
-X_train = preprocess_pipeline.transform(train_data)
+    preprocess_pipeline = FeatureUnion(transformer_list=[
+        ("numerical_pipeline", numerical_pipeline),
+        ("categorical_pipeline", categorical_pipeline),
+    ])
+    preprocess_pipeline = preprocess_pipeline.fit(train_data)
 
-# Save the pipeline to file
-joblib.dump(preprocess_pipeline, CURRENT_DIR / 'transform_pipeline.pkl')
+    X_train = preprocess_pipeline.transform(train_data)
 
-y_train = train_data['deposit']
-y_test = test_data['deposit']
-y_train.shape
+    # Save the pipeline to file
+    joblib.dump(preprocess_pipeline, CURRENT_DIR / 'artifacts' /
+                f'transform_pipeline_{attributes_type}.pkl')
 
-encode = LabelEncoder()
-y_train = encode.fit_transform(y_train)
-y_test = encode.fit_transform(y_test)
-y_train_yes = (y_train == 1)
-y_train
-y_train_yes
+    y_train = train_data['deposit']
+    y_test = test_data['deposit']
+    y_train.shape
 
-# Gradient Boosting Classifier
-grad_clf = GradientBoostingClassifier()
-grad_scores = cross_val_score(grad_clf, X_train, y_train, cv=3)
-grad_mean = grad_scores.mean()
+    encode = LabelEncoder()
+    y_train = encode.fit_transform(y_train)
+    y_test = encode.fit_transform(y_test)
+    y_train_yes = (y_train == 1)
+    y_train
+    y_train_yes
 
-y_train_pred = cross_val_predict(grad_clf, X_train, y_train, cv=3)
+    # Gradient Boosting Classifier
+    grad_clf = GradientBoostingClassifier()
+    grad_scores = cross_val_score(grad_clf, X_train, y_train, cv=3)
+    grad_mean = grad_scores.mean()
 
-grad_clf.fit(X_train, y_train)
-print("Gradient Boost Classifier accuracy is %2.2f" %
-      accuracy_score(y_train, y_train_pred))
+    y_train_pred = cross_val_predict(grad_clf, X_train, y_train, cv=3)
 
-# Save the model to file
-joblib.dump(grad_clf, CURRENT_DIR / 'gradient_boosting_classifier.pkl')
+    grad_clf.fit(X_train, y_train)
+    print("Gradient Boost Classifier accuracy is %2.2f" %
+          accuracy_score(y_train, y_train_pred))
+
+    # Save the model to file
+    joblib.dump(grad_clf, CURRENT_DIR / 'artifacts' /
+                f'gradient_boosting_classifier_{attributes_type}.pkl')
+
+
+# Train model with bank data attributes only and by including all attributes
+train_model_with_given_attibutes(constants.all)
+train_model_with_given_attibutes(constants.bank_data)
