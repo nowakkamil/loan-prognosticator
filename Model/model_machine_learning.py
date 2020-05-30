@@ -95,7 +95,7 @@ def train_model_with_given_attibutes(attributes_type):
     X_train = preprocess_pipeline.transform(train_data)
 
     # Save the pipeline to file
-    joblib.dump(preprocess_pipeline, CURRENT_DIR / 'artifacts' /
+    joblib.dump(preprocess_pipeline, CURRENT_DIR / 'pipeline' /
                 f'transform_pipeline_{attributes_type}.pkl')
 
     y_train = train_data['deposit']
@@ -121,7 +121,7 @@ def train_model_with_given_attibutes(attributes_type):
           accuracy_score(y_train, y_train_pred))
 
     # Save the model to file
-    joblib.dump(grad_clf, CURRENT_DIR / 'artifacts' /
+    joblib.dump(grad_clf, CURRENT_DIR / 'model' /
                 f'gradient_boosting_classifier_{attributes_type}.pkl')
 
 

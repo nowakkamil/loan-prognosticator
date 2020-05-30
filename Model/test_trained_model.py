@@ -14,9 +14,9 @@ CURRENT_DIR = Path(__file__).parent.absolute()
 
 
 def test_trained_model__with_given_attibutes(attributes_type):
-    MODEL_PATH = CURRENT_DIR / 'artifacts' / \
+    MODEL_PATH = CURRENT_DIR / 'model' / \
         f'gradient_boosting_classifier_{attributes_type}.pkl'
-    PIPELINE_PATH = CURRENT_DIR / 'artifacts' / \
+    PIPELINE_PATH = CURRENT_DIR / 'pipeline' / \
         f'transform_pipeline_{attributes_type}.pkl'
 
     # Load the model
