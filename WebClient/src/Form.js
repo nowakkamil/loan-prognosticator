@@ -14,37 +14,43 @@ class Form extends Component {
 
   handleChange(event) {
     const target = event.target;
-    const value = target.value;
+    let value = target.value;
     const key = target.name;
     this.setState(prevState => {
       let answer = { ...prevState.answer };
+
+      if (!isNaN(value)) {
+        value = parseInt(value);
+      }
+
       answer.parameters[key] = value;
       return { answer };
     })
   }
 
-  handleSubmit(event) {
-    this.state.answer.submitAnswer();
+  async handleSubmit(event) {
     event.preventDefault();
+    await this.state.answer.submitAnswer();
     this.props.handler();
   }
 
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
-
-      {Object.keys(this.state.answer.parameters).map(key => {
-        return(<label key={key}>
-          {key[0].toUpperCase() + key.slice(1)}:{' '}
-          <input name = {key}
-          onChange={this.handleChange} />
-          <br />
-        </label>)
-      })}
-
-      <input type="submit" value="Submit" />
-    </form>
+        {Object.entries(this.state.answer.parameters).map(([key, value]) => (
+          <label
+            key={key}>
+            {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
+            <input
+              name={key}
+              type={(Number.isInteger(value)) ? "number" : "text"}
+              onChange={this.handleChange} />
+            <br />
+          </label>))}
+        <input type="submit" value="Submit" />
+      </form>
     );
   }
 }
+
 export default Form;

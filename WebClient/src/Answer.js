@@ -1,34 +1,35 @@
 import axios from 'axios';
 
-class Answer{
-    constructor(props) {
-      this.parameters = {};
-      this.parameters['age'] = '';
-      this.parameters['job'] = '';
-      this.parameters['marital'] = '';
-      this.parameters['education'] = '';
-      this.parameters['default'] = '';
-      this.parameters['balance'] = '';
-      this.parameters['housing'] = '';
-      this.parameters['loan'] = '';
-      this.parameters['contact'] = '';
-      this.parameters['day'] = '';
-      this.parameters['month'] = '';
-      this.parameters['duration'] = '';
-      this.parameters['campaign'] = '';
-      this.parameters['pdays'] = '';
-      this.parameters['previous'] = '';
-      this.parameters['poutcome'] = '';
-      this.answer = null;
-      this.submitAnswer = this.submitAnswer.bind(this);
-    }
+class Answer {
+  constructor(props) {
+    this.parameters = {
+      'age': 0,
+      'job': '',
+      'marital': '',
+      'education': '',
+      'default': '',
+      'balance': 0,
+      'housing': '',
+      'loan': '',
+      'contact': '',
+      'day': 0,
+      'month': '',
+      'duration': 0,
+      'campaign': 0,
+      'pdays': 0,
+      'previous': 0,
+      'poutcome': ''
+    };
+    this.answer = null;
+    this.submitAnswer = this.submitAnswer.bind(this);
+  }
 
-    submitAnswer(){
-      console.log(this.parameters)
-      axios.post(`http://localhost:5000`, this.parameters)
-            .then(response => console.log(response))
-            .catch(error => console.error(error.response.data))
-    }
+  async submitAnswer() {
+    console.log(this.parameters)
+    await axios.post(`http://localhost:5000`, this.parameters)
+      .then(response => console.log(response))
+      .catch(error => console.error(error.response.data))
+  }
 }
 
 export default Answer;
