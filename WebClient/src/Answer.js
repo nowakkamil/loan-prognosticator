@@ -20,21 +20,15 @@ class Answer{
       this.parameters['previous'] = '';
       this.parameters['poutcome'] = '';
       this.answer = null;
-      this.submit_answer = this.submit_answer.bind(this);
+      this.submitAnswer = this.submitAnswer.bind(this);
     }
 
-    submit_answer(){
-      // var xhr = new XMLHttpRequest();
-      // xhr.addEventListener('load', () => {
-      //   console.log(xhr.responseText)
-      // })
-      // xhr.open('POST', 'http://127.0.0.1:5000/')
-      // // send the request
-      // xhr.send(JSON.stringify(this.p))
-      console.log(JSON.stringify(this.p))
-      axios.post(`http://localhost:5000`, JSON.stringify(this.p))
+    submitAnswer(){
+      console.log(this.parameters)
+      axios.post(`http://localhost:5000`, this.parameters)
             .then(response => console.log(response))
-            
+            .catch(error => console.error(error.response.data))
     }
 }
+
 export default Answer;
