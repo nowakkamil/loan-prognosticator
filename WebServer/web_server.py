@@ -69,9 +69,9 @@ columns = ["age",
 
 # Flask app
 app = Flask(__name__)
-app.config['CORS_HEADERS'] = 'Content-Type'
-cors = CORS(app)
 api = Api(app)
+cors = CORS(app, allow_headers='*',
+            origins='*', methods='*', expose_headers='Authorization')
 
 
 class WebServer(Resource):
@@ -96,8 +96,9 @@ class WebServer(Resource):
 
     @app.after_request
     def after_request(response):
-        header = response.headers
-        header['Access-Control-Allow-Origin'] = '*'
+        response.headers.add('Access-Control-Allow-Headers',
+                             'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'POST')
 
         return response
 
