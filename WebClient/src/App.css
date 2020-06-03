@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;700&display=swap");
+
 .App {
   text-align: center;
 }
@@ -13,8 +15,16 @@
   }
 }
 
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background: #202020;
+  overflow-x: hidden;
+}
+
 .App-header {
-  background-color: #282c34;
+  background-color: #202020;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,6 +32,9 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  margin-right: -86px;
+  padding-top: 125px;
+  overflow: hidden;
 }
 
 .App-link {
@@ -35,4 +48,72 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.nav-bar {
+  width: 10%;
+  height: 10%;
+  border-radius: 50%;
+  margin: 17px 15px 17px 24px;
+}
+.nav-bar-text {
+  color: white;
+  font-family: "Noto Sans TC", sans-serif;
+  font-size: 30px;
+  margin-left: 20px;
+  height: 100px;
+  line-height: 100px;
+  white-space: nowrap;
+  font-weight: 300;
+}
+.app-header {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  background-color: #202020;
+}
+.hexagon {
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 88%;
+  opacity: 15%;
+}
+.hexagon-wrapper {
+  position: relative;
+  height: auto;
+  width: 120%;
+  background: transparent;
+  overflow: hidden;
+}
+.wrapper {
+  display: flex;
+  border-bottom: 1px solid #424242;
+  overflow: hidden;
+  position: fixed;
+  left: 0;
+  right: 0;
+}
+.last-item {
+  margin-left: auto;
+}
+.last-item::before {
+  content: "";
+  display: block;
+  width: 470px;
+  height: 100px;
+  position: absolute;
+  left: -170px;
+  z-index: 10000;
+  background: linear-gradient(
+    90deg,
+    rgba(32, 32, 32, 1) 36%,
+    rgba(255, 255, 255, 0) 100%
+  );
 }
