@@ -1,35 +1,40 @@
-import React, { Component } from 'react';
-import Form from './Form';
-import Button from './Button';
+import React, { Component } from "react";
+import Form from "./Form";
+import Button from "./Button";
 
 class Start extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            value: true,
-        };
-        this._onButtonClick = this._onButtonClick.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: true,
+    };
+    this.handleButtonClick = this.handleButtonClick.bind(this);
+  }
 
-    _onButtonClick() {
-        this.setState({
-            value: !this.state.value
-        })
-    }
+  handleButtonClick() {
+    this.setState({
+      value: !this.state.value,
+    });
+  }
 
-    render() {
-        return (
-            <div>
-                <p>
-                    Welcome to Bank App
-                </p>
-                {this.state.value ?
-                    <Button handler = {this._onButtonClick} /> :
-                    <Form handler = {this._onButtonClick}/>
-                }
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div className="intro">
+        {this.state.value ? (
+          <React.Fragment>
+            <p>Welcome to Bank App</p>
+            <Button handler={this.handleButtonClick} />
+          </React.Fragment>
+        ) : (
+            <React.Fragment>
+              <p className="form-title">
+                Fill all the fields below
+              </p>
+              <Form handler={this.handleButtonClick} />
+            </React.Fragment>
+          )}
+      </div>
+    );
+  }
 }
 export default Start;
-
