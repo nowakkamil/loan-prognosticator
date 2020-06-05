@@ -36,18 +36,22 @@ class Form extends Component {
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit}>
+      <form className="form" onSubmit={this.handleSubmit}>
         {Object.entries(this.state.answer.parameters).map(([key, value]) => (
-          <label
-            key={key}>
-            {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
+          <div
+            key={key}
+            className="row">
+            <p className="column label">
+              {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
+            </p>
             <input
+              className="column input"
               name={key}
               type={(Number.isInteger(value)) ? "number" : "text"}
               onChange={this.handleChange} />
             <br />
-          </label>))}
-        <input type="submit" value="Submit" />
+          </div>))}
+        <input className="submit" type="submit" value="Submit" />
       </form>
     );
   }

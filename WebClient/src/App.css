@@ -1,20 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;700&display=swap");
 
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 html,
 body {
   height: 100%;
@@ -23,31 +8,55 @@ body {
   overflow-x: hidden;
 }
 
-.App-header {
+.intro {
   background-color: #202020;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
   margin-right: -86px;
   padding-top: 125px;
   overflow: hidden;
 }
 
-.App-link {
-  color: #61dafb;
+.form-title {
+  font-size: 20px;
+  padding-bottom: 7px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.form .row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  margin: 10px;
+  font-size: 20px;
+}
+
+.form .column {
+  flex: 1;
+}
+
+.form .label {
+  text-align: end;
+  padding-right: 16px;
+}
+
+.form .input {
+  padding: 6px;
+  background: transparent;
+  border: 1px solid #424242;
+  border-radius: 4px;
+  color: white;
+  flex-grow: 2;
+  min-height: 30px;
+}
+
+.form .submit {
+  display: block;
+  margin: 0 auto;
 }
 
 * {
@@ -111,9 +120,5 @@ body {
   position: absolute;
   left: -170px;
   z-index: 10000;
-  background: linear-gradient(
-    90deg,
-    rgba(32, 32, 32, 1) 36%,
-    rgba(255, 255, 255, 0) 100%
-  );
+  background: linear-gradient(90deg, rgba(32, 32, 32, 1) 36%, rgba(255, 255, 255, 0) 100%);
 }

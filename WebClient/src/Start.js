@@ -8,10 +8,10 @@ class Start extends Component {
     this.state = {
       value: true,
     };
-    this._onButtonClick = this._onButtonClick.bind(this);
+    this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
-  _onButtonClick() {
+  handleButtonClick() {
     this.setState({
       value: !this.state.value,
     });
@@ -19,13 +19,20 @@ class Start extends Component {
 
   render() {
     return (
-      <div>
-        <p>Welcome to Bank App</p>
+      <div className="intro">
         {this.state.value ? (
-          <Button handler={this._onButtonClick} />
+          <React.Fragment>
+            <p>Welcome to Bank App</p>
+            <Button handler={this.handleButtonClick} />
+          </React.Fragment>
         ) : (
-          <Form handler={this._onButtonClick} />
-        )}
+            <React.Fragment>
+              <p className="form-title">
+                Fill all the fields below
+              </p>
+              <Form handler={this.handleButtonClick} />
+            </React.Fragment>
+          )}
       </div>
     );
   }

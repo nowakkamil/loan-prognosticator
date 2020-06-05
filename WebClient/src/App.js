@@ -5,11 +5,11 @@ import NavBar from './navBar'
 
 function App() {
   return (
-    <div className="App">
-      <NavBar/>
-      <header className="App-header">
+    <div>
+      <NavBar />
+      <div>
         <Start />
-      </header>
+      </div>
     </div>
   );
 }
