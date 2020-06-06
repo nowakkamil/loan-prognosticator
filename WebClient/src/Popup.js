@@ -5,22 +5,11 @@ import fail from './img/fail.svg'
 
 class Popup extends Component { 
     
-    constructor(props){
-        super(props)
-        this.state = {
-            success: false
-        }
-    }
-
-    componentWillReceiveProps(props) {
-        this.setState({ success: props.success })
-      }
-
     render() {  
         return (  
             <div className='popup'>  
                 <div className='popup\_inner'>  
-                    {this.state.success ?  
+                    {this.props.success ?  
                         <img src={success} alt="answer" className="answer-icon" /> 
                         : <img src={fail} alt="answer" className="answer-icon" /> 
                     }    
