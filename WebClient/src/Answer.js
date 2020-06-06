@@ -24,11 +24,15 @@ class Answer {
     this.submitAnswer = this.submitAnswer.bind(this);
   }
 
-  async submitAnswer() {
+  async submitAnswer(handler) {
     console.log(this.parameters)
     await axios.post(`http://localhost:5000`, this.parameters)
-      .then(response => console.log(response))
+      .then(response => {
+        console.log(response)
+        this.answer = response
+      })
       .catch(error => console.error(error.response.data))
+    handler(this.answer)
   }
 }
 
