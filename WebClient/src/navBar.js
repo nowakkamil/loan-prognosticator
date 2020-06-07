@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import logo from "./img/money.jpg";
 import hexagon from "./img/hexagon.png";
 
@@ -12,7 +12,7 @@ const NavBar = () => (
         </figcaption>
       </figure>
       <figure className="hexagon-wrapper last-item">
-        <img src={hexagon} className="hexagon" />
+        <img src={hexagon} alt="logo_back" className="hexagon" />
       </figure>
     </header>
   </div>

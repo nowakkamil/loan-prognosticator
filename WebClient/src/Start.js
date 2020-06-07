@@ -7,14 +7,18 @@ class Start extends Component {
     super(props);
     this.state = {
       value: true,
+      optional: false
     };
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
-  handleButtonClick() {
+  handleButtonClick(optional_) {
     this.setState({
-      value: !this.state.value,
+      optional: optional_,
+      value: !this.state.value
     });
+    console.log(this.state.optional)
+    console.log(optional_)
   }
 
   render() {
@@ -23,16 +27,23 @@ class Start extends Component {
         {this.state.value ? (
           <React.Fragment>
             <p>Welcome to Bank App</p>
-            <Button handler={this.handleButtonClick} />
+            <Button 
+                handler={this.handleButtonClick}
+                optional={false}
+                text="Show Simple Form" />
+            <Button 
+                handler={this.handleButtonClick}
+                optional={true}
+                text='Show Advanced Form' />
           </React.Fragment>
         ) : (
-            <React.Fragment>
-              <p className="form-title">
-                Fill all the fields below
-              </p>
-              <Form handler={this.handleButtonClick} />
-            </React.Fragment>
-          )}
+          <React.Fragment>
+            <p className="form-title">
+              Fill all the fields below
+            </p>
+            <Form handler={this.handleButtonClick} optional={this.state.optional} />
+          </React.Fragment>
+        )}
       </div>
     );
   }

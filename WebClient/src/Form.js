@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Switch from "react-switch";
 
 import Answer from './Answer';
 import Popup  from './Popup';
@@ -9,22 +10,20 @@ class Form extends Component {
     this.state = {
       answer: new Answer(),
       success: true,
-      showPopup: false
+      showPopup: false,
+      optional: false
     };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.togglePopup = this.togglePopup.bind(this);
+    this.changeOptional = this.changeOptional.bind(this);
   }
 
   handleChange(event) {
     const target = event.target;
     let value = target.value;
     const key = target.name;
-    this.changeAnswer(key, value)
-  }
-
-  changeAnswer(key, value){
     this.setState(prevState => {
       let answer = { ...prevState.answer };
 
@@ -41,6 +40,17 @@ class Form extends Component {
     event.preventDefault();
     await this.state.answer.submitAnswer(this.togglePopup);
   }
+  
+  componentWillReceiveProps(props) {
+    this.setState({ 
+      optional: props.optional })
+  }
+  
+  changeOptional(){
+    this.setState({
+      optional: !this.state.optional
+    })
+  }
 
   togglePopup(answer) {  
     this.setState({ 
@@ -51,16 +61,30 @@ class Form extends Component {
 
   chooseInput(key, value){
     if(value === 'number' || value === 'text'){
-      return (
-        <input
-          className="column input"
-          name={key}
-          type={value}
-          onChange={this.handleChange} />
-      )
+      return(this.simpleInputChosen(key, value))
     }else{ 
       if(Array.isArray(value)){
-        const defaultOption = value[0]
+        return(this.dropDownChosen(key, value))
+      }else{
+        if(value === 'radio'){
+          return(this.radioButtonsChosen(key, value))
+        }
+      }
+    }
+  }
+
+  simpleInputChosen(key, value){
+    return (
+      <input
+        className="column input"
+        name={key}
+        type={value}
+        onChange={this.handleChange} />
+    )
+  }
+
+  dropDownChosen(key, value){
+    const defaultOption = value[0]
         return (
           <select 
             value={defaultOption} 
@@ -73,28 +97,44 @@ class Form extends Component {
             })}
           </select>
         )
-      }else{
-        if(value === 'radio'){
-          return (
-            <div className="column input" 
-              onChange={this.handleChange}>
-              <label>
-                <input type="radio" value="yes" name={key} />
-                <span>Yes </span>
-              </label>
-              <label>
-                <input type="radio" value="no" name={key}  />
-                <span>No </span> 
-              </label>
-              <label>
-                <input type="radio" value="unknown" name={key} defaultChecked />
-                <span>Unknown </span>
-              </label>
-            </div>
-          )
-        }
-      }
-    }
+  }
+
+  radioButtonsChosen(key, value){
+    return (
+      <div className="column input" 
+        onChange={this.handleChange}>
+        <label>
+          <input type="radio" value="yes" name={key} />
+          <span>Yes </span>
+        </label>
+        <label>
+          <input type="radio" value="no" name={key}  />
+          <span>No </span> 
+        </label>
+        <label>
+          <input type="radio" value="unknown" name={key} defaultChecked />
+          <span>Unknown </span>
+        </label>
+      </div>
+    )
+  }
+
+  populateForm(param_dict){
+    return(
+      <React.Fragment>
+        {Object.entries(param_dict).map(([key, value]) => (
+        <div
+          key={key}
+          className="row">
+          <p className="column label">
+            {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
+          </p>
+          {this.chooseInput(key, value)}
+          <br />
+        </div>))}
+      </React.Fragment>
+      
+    )
   }
 
   render() {
@@ -106,22 +146,19 @@ class Form extends Component {
             closePopup={this.togglePopup} 
           />  
           : null  
-        }  
+        }
+        
         <form className="form" onSubmit={this.handleSubmit}>
-          {Object.entries(this.state.answer.default_params).map(([key, value]) => (
-            <div
-              key={key}
-              className="row">
-              <p className="column label">
-                {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
-              </p>
-              {this.chooseInput(key, value)}
-              
-              <br />
-            </div>))}
+          {this.populateForm(this.state.answer.default_params['req'])}
+          {this.state.optional ?
+            this.populateForm(this.state.answer.default_params['optional'])
+            : null
+          }
           <input className="submit" type="submit" value="Submit" />
         </form>
-        
+
+        <Switch onChange={this.changeOptional} checked={this.state.optional} />
+
       </div>
     );
   }
