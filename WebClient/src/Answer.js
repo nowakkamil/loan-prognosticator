@@ -1,9 +1,13 @@
 import axios from 'axios';
 
+const post_adress = 'http://127.0.0.1:5000/?bank_data_only';
+const req = 'req';
+const opt = 'opt';
+
 class Answer {
   constructor(props) {
     this.default_params = {
-      'req':{
+      req:{
         'age': 'number',
         'job': ['unknown', 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed'],
         'marital': ['unknown','single','married', 'divorced'],
@@ -13,7 +17,7 @@ class Answer {
         'housing': 'radio',
         'loan': 'radio',
       },
-      'optional':{
+      opt:{
         'contact': ['telephone', 'cellular'],
         'day': ['mon','tue','wed','thu','fri'],
         'month': ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
@@ -24,35 +28,41 @@ class Answer {
         'poutcome': ['nonexistent', 'success', 'failure']
       }
     };
-    this.parameters = {}
-    this.populateParameters(this.default_params['req'])
-    this.populateParameters(this.default_params['optional'])
+    this.parameters = {req:{}, opt:{}}
+    this.populateParameters(req)
+    this.populateParameters(opt)
     
     this.answer = null;
     this.submitAnswer = this.submitAnswer.bind(this);
   }
 
-  async submitAnswer(handler) {
-    console.log(this.parameters)
-    await axios.post(`http://localhost:5000`, this.parameters)
+  async submitAnswer(handler, optional) {
+    let post_dict = Object.assign({}, this.parameters[req]);
+    if(optional === true){
+      post_dict = Object.assign({}, this.parameters[req], this.parameters[opt]);
+    }
+    console.log(post_dict)
+    await axios.post(post_adress, post_dict)
       .then(response => {
         console.log(response)
         this.answer = response
       })
       .catch(error => console.error(error.response.data))
-    handler(true)
+    handler(this.answer.data.outcome)
   }
 
-  populateParameters(param_dict){
+  populateParameters(mode){
+    var param_dict = this.default_params[mode]
+
     for (var key in param_dict) {
       if (param_dict.hasOwnProperty(key)) {  
         if (param_dict[key] === "number"){
-          this.parameters[key] = 0;
+          this.parameters[mode][key] = 0;
         }else{
           if(param_dict[key] === "radio"){
-            this.parameters[key] = 'unknown';
+            this.parameters[mode][key] = 'unknown';
           }else{
-            this.parameters[key] = param_dict[key][0];
+            this.parameters[mode][key] = param_dict[key][0];
           }
         }
       }

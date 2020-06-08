@@ -10,15 +10,14 @@ class Start extends Component {
       optional: false
     };
     this.handleButtonClick = this.handleButtonClick.bind(this);
+    this._Form = React.createRef();
   }
 
-  handleButtonClick(optional_) {
+  handleButtonClick(_optional) {
     this.setState({
-      optional: optional_,
       value: !this.state.value
     });
-    console.log(this.state.optional)
-    console.log(optional_)
+   // this._Form.current.changeOptional(_optional)
   }
 
   render() {
@@ -41,7 +40,9 @@ class Start extends Component {
             <p className="form-title">
               Fill all the fields below
             </p>
-            <Form handler={this.handleButtonClick} optional={this.state.optional} />
+            <Form 
+              ref={this._Form}
+              handler={this.handleButtonClick} />
           </React.Fragment>
         )}
       </div>

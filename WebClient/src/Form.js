@@ -4,6 +4,9 @@ import Switch from "react-switch";
 import Answer from './Answer';
 import Popup  from './Popup';
 
+const req = 'req';
+const opt = 'opt';
+
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -14,13 +17,15 @@ class Form extends Component {
       optional: false
     };
 
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.togglePopup = this.togglePopup.bind(this);
-    this.changeOptional = this.changeOptional.bind(this);
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSubmit = this.handleSubmit.bind(this)
+    this.togglePopup = this.togglePopup.bind(this)
+    this.changeOptional = this.changeOptional.bind(this)
+    this.reverseOptional = this.reverseOptional.bind(this)
+    this.Popup = React.createRef()
   }
 
-  handleChange(event) {
+  handleChange(event, mode) {
     const target = event.target;
     let value = target.value;
     const key = target.name;
@@ -31,14 +36,14 @@ class Form extends Component {
         value = parseInt(value);
       }
 
-      answer.parameters[key] = value;
+      answer.parameters[mode][key] = value;
       return { answer };
     })
   }
 
   async handleSubmit(event) {
     event.preventDefault();
-    await this.state.answer.submitAnswer(this.togglePopup);
+    await this.state.answer.submitAnswer(this.togglePopup, this.state.optional);
   }
   
   componentWillReceiveProps(props) {
@@ -46,7 +51,13 @@ class Form extends Component {
       optional: props.optional })
   }
   
-  changeOptional(){
+  changeOptional(_optional){
+    this.setState({
+      optional: _optional
+    })
+  }
+
+  reverseOptional(){
     this.setState({
       optional: !this.state.optional
     })
@@ -54,55 +65,54 @@ class Form extends Component {
 
   togglePopup(answer) {  
     this.setState({ 
-        success: answer,
         showPopup: !this.state.showPopup  
-    });  
+    }); 
+    this.Popup.current.changeSuccess(answer)
   }  
 
-  chooseInput(key, value){
+  chooseInput(key, value, mode){
     if(value === 'number' || value === 'text'){
-      return(this.simpleInputChosen(key, value))
+      return(this.simpleInputChosen(key, value, mode))
     }else{ 
       if(Array.isArray(value)){
-        return(this.dropDownChosen(key, value))
+        return(this.dropDownChosen(key, value, mode))
       }else{
         if(value === 'radio'){
-          return(this.radioButtonsChosen(key, value))
+          return(this.radioButtonsChosen(key, value, mode))
         }
       }
     }
   }
 
-  simpleInputChosen(key, value){
+  simpleInputChosen(key, value, mode){
     return (
       <input
         className="column input"
         name={key}
-        type={value}
-        onChange={this.handleChange} />
+        type={(Number.isInteger(value)) ? "number" : "text"}
+        onChange={(e) => this.handleChange(e, mode)} />
     )
   }
 
-  dropDownChosen(key, value){
-    const defaultOption = value[0]
+  dropDownChosen(key, value, mode){
+    // const defaultOption = value[0]
         return (
           <select 
-            value={defaultOption} 
-            onChange={this.handleChange}
+            onChange={(e) => this.handleChange(e, mode)}
             className="column input"
             name={key}   
           >
-            {value.map((elem, i) => {       
+            {value.map((elem, i) => {  
               return (<option value={elem} key={elem} >{elem}</option>) 
             })}
           </select>
         )
   }
 
-  radioButtonsChosen(key, value){
+  radioButtonsChosen(key, value, mode){
     return (
       <div className="column input" 
-        onChange={this.handleChange}>
+        onChange={(e) => this.handleChange(e, mode)} >
         <label>
           <input type="radio" value="yes" name={key} />
           <span>Yes </span>
@@ -119,7 +129,9 @@ class Form extends Component {
     )
   }
 
-  populateForm(param_dict){
+  populateForm(mode){
+    let param_dict = this.state.answer.default_params[mode]
+
     return(
       <React.Fragment>
         {Object.entries(param_dict).map(([key, value]) => (
@@ -129,11 +141,10 @@ class Form extends Component {
           <p className="column label">
             {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
           </p>
-          {this.chooseInput(key, value)}
+          {this.chooseInput(key, value, mode)}
           <br />
         </div>))}
       </React.Fragment>
-      
     )
   }
 
@@ -142,22 +153,22 @@ class Form extends Component {
       <div className="form-answer">
         {this.state.showPopup ?  
           <Popup 
-            success={this.success}  
+            ref={this.Popup}
             closePopup={this.togglePopup} 
           />  
           : null  
         }
         
         <form className="form" onSubmit={this.handleSubmit}>
-          {this.populateForm(this.state.answer.default_params['req'])}
+          {this.populateForm(req)}
           {this.state.optional ?
-            this.populateForm(this.state.answer.default_params['optional'])
+            this.populateForm(opt)
             : null
           }
           <input className="submit" type="submit" value="Submit" />
         </form>
 
-        <Switch onChange={this.changeOptional} checked={this.state.optional} />
+        <Switch onChange={this.reverseOptional} checked={this.state.optional} />
 
       </div>
     );

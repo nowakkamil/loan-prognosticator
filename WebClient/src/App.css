@@ -8,6 +8,10 @@ body {
   overflow-x: hidden;
 }
 
+.start {
+  clear: left;
+}
+
 .intro {
   background-color: #202020;
   min-height: 100vh;
