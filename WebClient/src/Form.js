@@ -46,17 +46,28 @@ class Form extends Component {
   async handleSubmit(event) {
     event.preventDefault();
     if(!this.checkAnswer()){
-      alert("You have to fill all the fields")
       return
     }
     await this.state.answer.submitAnswer(this.togglePopup, this.state.optional);
   }
 
   checkAnswer(){
+    const limit_dict = {
+      "age": [18, 120],
+      "pdays": [0, 999]
+    }
     let answer_dict = this.state.answer.getModeAnswer(this.state.optional)
+    for (var key in limit_dict){
+      if(answer_dict[key] < limit_dict[key][0] && answer_dict[key] > limit_dict[key][1]){
+        alert("Wrong value in " + key)
+        return false
+      }
+    }
+
     for (var key in answer_dict){
-      if(answer_dict[key] === 0 ||
+      if(answer_dict[key] === -1 ||
         answer_dict[key] === "unknown"){
+        alert("You have to fill all the fields")
         return false
       }  
     }

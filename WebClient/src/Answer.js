@@ -20,7 +20,7 @@ class Answer {
       },
       opt:{
         'contact': ['telephone', 'cellular'],
-        'day': ['mon','tue','wed','thu','fri'],
+        'day': 'number',
         'month': ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
         'duration': 'number',
         'campaign': 'number',
@@ -68,7 +68,7 @@ class Answer {
     for (var key in param_dict) {
       if (param_dict.hasOwnProperty(key)) {  
         if (param_dict[key] === "number"){
-          this.parameters[mode][key] = 0;
+          this.parameters[mode][key] = -1;
         }else{
           if(param_dict[key] === "radio"){
             this.parameters[mode][key] = 'unknown';
