@@ -53,20 +53,20 @@ class Form extends Component {
 
   checkAnswer(){
     const limit_dict = {
-      "age": [18, 120],
+      "age": [18, 150],
       "pdays": [0, 999]
     }
     let answer_dict = this.state.answer.getModeAnswer(this.state.optional)
     for (var key in limit_dict){
-      if(answer_dict[key] < limit_dict[key][0] && answer_dict[key] > limit_dict[key][1]){
+      if(answer_dict[key] < limit_dict[key][0] || answer_dict[key] > limit_dict[key][1]){
         alert("Wrong value in " + key)
         return false
       }
     }
 
-    for (var key in answer_dict){
-      if(answer_dict[key] === -1 ||
-        answer_dict[key] === "unknown"){
+    for (var key1 in answer_dict){
+      if(answer_dict[key1] === -1 ||
+        answer_dict[key1] === "unknown"){
         alert("You have to fill all the fields")
         return false
       }  
@@ -109,11 +109,21 @@ class Form extends Component {
   }
 
   simpleInputChosen(key, value, mode){
+    if(key === 'age'){
+      return (
+        <input
+          className="column input"
+          name={key}
+          min="18"
+          type="number"
+          onChange={(e) => this.handleChange(e, mode)} />
+      )
+    }
     return (
       <input
         className="column input"
         name={key}
-        type={(Number.isInteger(value)) ? "number" : "text"}
+        type="number"
         onChange={(e) => this.handleChange(e, mode)} />
     )
   }
