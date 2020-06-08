@@ -10,8 +10,8 @@ attributes = {
         'categorical': ["job", "education", "marital", "default", "housing", "loan"]
     },
     'all': {
-        'numerical': ["age", "balance", "day", "campaign", "pdays", "previous", "duration"],
-        'categorical': ["job", "education", "marital", "default", "housing",
+        'numerical': ["age", "balance", "campaign", "pdays", "previous", "duration"],
+        'categorical': ["job", "education", "day", "marital", "default", "housing",
                         "loan", "contact", "month", "poutcome"]
     }
 }
