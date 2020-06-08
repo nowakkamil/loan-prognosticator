@@ -8,6 +8,10 @@ body {
   overflow-x: hidden;
 }
 
+.start {
+  clear: left;
+}
+
 .intro {
   background-color: #202020;
   min-height: 100vh;
@@ -16,6 +20,8 @@ body {
   align-items: center;
   justify-content: center;
   color: white;
+  padding-top: 10%;
+  padding-bottom: 10%;
 }
 
 .form-title {
@@ -49,6 +55,10 @@ body {
   color: white;
   flex-grow: 2;
   min-height: 30px;
+}
+
+.form .option {
+  color: black;
 }
 
 .form .submit {

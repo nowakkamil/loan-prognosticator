@@ -7,7 +7,8 @@ function App() {
   return (
     <div>
       <NavBar />
-      <div>
+      <br />
+      <div className="start">
         <Start />
       </div>
     </div>

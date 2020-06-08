@@ -1,34 +1,83 @@
 import axios from 'axios';
 
+const post_adress_req = 'http://127.0.0.1:5000/?bank_data_only';
+const post_adress_opt = 'http://127.0.0.1:5000/';
+const req = 'req';
+const opt = 'opt';
+
 class Answer {
   constructor(props) {
-    this.parameters = {
-      'age': 0,
-      'job': '',
-      'marital': '',
-      'education': '',
-      'default': '',
-      'balance': 0,
-      'housing': '',
-      'loan': '',
-      'contact': '',
-      'day': 0,
-      'month': '',
-      'duration': 0,
-      'campaign': 0,
-      'pdays': 0,
-      'previous': 0,
-      'poutcome': ''
+    this.default_params = {
+      req:{
+        'age': 'number',
+        'job': ['unknown', 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed'],
+        'marital': ['unknown','single','married', 'divorced'],
+        'education': ['unknown', 'primary', 'secondary', 'tertiary'],
+        'default': 'radio',
+        'balance': 'number',
+        'housing': 'radio',
+        'loan': 'radio',
+      },
+      opt:{
+        'contact': ['telephone', 'cellular'],
+        'day': 'number',
+        'month': ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
+        'duration': 'number',
+        'campaign': 'number',
+        'pdays':'number',
+        'previous': 'number',
+        'poutcome': ['nonexistent', 'success', 'failure']
+      }
     };
+    this.parameters = {req:{}, opt:{}}
+    this.populateParameters(req)
+    this.populateParameters(opt)
+    
     this.answer = null;
-    this.submitAnswer = this.submitAnswer.bind(this);
+    this.submitAnswer = this.submitAnswer.bind(this)
+    this.getModeAnswer = this.getModeAnswer.bind(this)
   }
 
-  async submitAnswer() {
-    console.log(this.parameters)
-    await axios.post(`http://localhost:5000`, this.parameters)
-      .then(response => console.log(response))
+  async submitAnswer(handler, optional) {
+    let post_dict = this.getModeAnswer(optional)
+    let post_adress = post_adress_req
+    if(optional){
+      post_adress = post_adress_opt
+    }
+    console.log(post_dict)
+    await axios.post(post_adress, post_dict)
+      .then(response => {
+        console.log(response)
+        this.answer = response
+      })
       .catch(error => console.error(error.response.data))
+    handler(this.answer.data.outcome)
+  }
+
+  getModeAnswer(optional){
+    let dict = Object.assign({}, this.parameters[req]);
+    if(optional === true){
+      dict = Object.assign({}, this.parameters[req], this.parameters[opt]);
+    }
+    return dict
+  }
+
+  populateParameters(mode){
+    var param_dict = this.default_params[mode]
+
+    for (var key in param_dict) {
+      if (param_dict.hasOwnProperty(key)) {  
+        if (param_dict[key] === "number"){
+          this.parameters[mode][key] = -1;
+        }else{
+          if(param_dict[key] === "radio"){
+            this.parameters[mode][key] = 'unknown';
+          }else{
+            this.parameters[mode][key] = param_dict[key][0];
+          }
+        }
+      }
+    }
   }
 }
 
