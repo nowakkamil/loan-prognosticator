@@ -33,14 +33,12 @@ class Answer {
     this.populateParameters(opt)
     
     this.answer = null;
-    this.submitAnswer = this.submitAnswer.bind(this);
+    this.submitAnswer = this.submitAnswer.bind(this)
+    this.getModeAnswer = this.getModeAnswer.bind(this)
   }
 
   async submitAnswer(handler, optional) {
-    let post_dict = Object.assign({}, this.parameters[req]);
-    if(optional === true){
-      post_dict = Object.assign({}, this.parameters[req], this.parameters[opt]);
-    }
+    let post_dict = this.getModeAnswer(optional)
     console.log(post_dict)
     await axios.post(post_adress, post_dict)
       .then(response => {
@@ -49,6 +47,14 @@ class Answer {
       })
       .catch(error => console.error(error.response.data))
     handler(this.answer.data.outcome)
+  }
+
+  getModeAnswer(optional){
+    let dict = Object.assign({}, this.parameters[req]);
+    if(optional === true){
+      dict = Object.assign({}, this.parameters[req], this.parameters[opt]);
+    }
+    return dict
   }
 
   populateParameters(mode){

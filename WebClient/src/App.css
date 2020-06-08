@@ -55,6 +55,10 @@ body {
   min-height: 30px;
 }
 
+.form .option {
+  color: black;
+}
+
 .form .submit {
   display: block;
   margin: 0 auto;

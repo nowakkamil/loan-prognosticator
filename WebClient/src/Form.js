@@ -23,6 +23,8 @@ class Form extends Component {
     this.changeOptional = this.changeOptional.bind(this)
     this.reverseOptional = this.reverseOptional.bind(this)
     this.Popup = React.createRef()
+    this._Submit = React.createRef()
+    this._DropDown = React.createRef()
   }
 
   handleChange(event, mode) {
@@ -43,13 +45,28 @@ class Form extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
+    if(!this.checkAnswer()){
+      alert("You have to fill all the fields")
+      return
+    }
     await this.state.answer.submitAnswer(this.togglePopup, this.state.optional);
   }
-  
-  componentWillReceiveProps(props) {
-    this.setState({ 
-      optional: props.optional })
+
+  checkAnswer(){
+    let answer_dict = this.state.answer.getModeAnswer(this.state.optional)
+    for (var key in answer_dict){
+      if(answer_dict[key] === 0 ||
+        answer_dict[key] === "unknown"){
+        return false
+      }  
+    }
+    return true
   }
+  
+  // componentWillReceiveProps(props) {
+  //   this.setState({ 
+  //     optional: props.optional })
+  // }
   
   changeOptional(_optional){
     this.setState({
@@ -64,6 +81,7 @@ class Form extends Component {
   }
 
   togglePopup(answer) {  
+    this._Submit.current.disabled = !this._Submit.current.disabled
     this.setState({ 
         showPopup: !this.state.showPopup  
     }); 
@@ -100,10 +118,11 @@ class Form extends Component {
           <select 
             onChange={(e) => this.handleChange(e, mode)}
             className="column input"
+            ref={this._DropDown}
             name={key}   
           >
             {value.map((elem, i) => {  
-              return (<option value={elem} key={elem} >{elem}</option>) 
+              return (<option className="option" value={elem} key={elem} >{elem}</option>) 
             })}
           </select>
         )
@@ -165,7 +184,7 @@ class Form extends Component {
             this.populateForm(opt)
             : null
           }
-          <input className="submit" type="submit" value="Submit" />
+          <input className="submit" type="submit" value="Submit" ref={this._Submit}/>
         </form>
 
         <Switch onChange={this.reverseOptional} checked={this.state.optional} />
