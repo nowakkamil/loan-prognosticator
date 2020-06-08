@@ -181,8 +181,12 @@ class Form extends Component {
           <input className="submit" type="submit" value="Submit" ref={this._Submit}/>
         </form>
 
-        <Switch onChange={this.reverseOptional} checked={this.state.optional} />
-
+        <br />
+        <span>Switch between Simple/Advanced Form</span><br />
+        <Switch 
+          className="switch"
+          onChange={this.reverseOptional} 
+          checked={this.state.optional} />
       </div>
     );
   }
