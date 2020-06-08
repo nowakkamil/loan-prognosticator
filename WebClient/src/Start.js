@@ -10,12 +10,12 @@ class Start extends Component {
       optional: false
     };
     this.handleButtonClick = this.handleButtonClick.bind(this);
-    this._Form = React.createRef();
   }
 
   handleButtonClick(_optional) {
     this.setState({
-      value: !this.state.value
+      value: !this.state.value,
+      optional: _optional
     });
   }
 
@@ -26,11 +26,10 @@ class Start extends Component {
           Fill all the fields below
         </p>
         <Form 
-          ref={this._Form}
+          optional={this.state.optional}
           handler={this.handleButtonClick} />
       </React.Fragment>
     )
-    // this._Form.current.changeOptional(_optional)
   }
 
   renderButtons(){

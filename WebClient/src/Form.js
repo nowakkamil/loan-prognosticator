@@ -14,7 +14,7 @@ class Form extends Component {
       answer: new Answer(),
       success: true,
       showPopup: false,
-      optional: false
+      optional: this.props.optional
     };
 
     this.handleChange = this.handleChange.bind(this)
@@ -63,11 +63,6 @@ class Form extends Component {
     return true
   }
   
-  // componentWillReceiveProps(props) {
-  //   this.setState({ 
-  //     optional: props.optional })
-  // }
-  
   changeOptional(_optional){
     this.setState({
       optional: _optional
@@ -113,7 +108,6 @@ class Form extends Component {
   }
 
   dropDownChosen(key, value, mode){
-    // const defaultOption = value[0]
         return (
           <select 
             onChange={(e) => this.handleChange(e, mode)}
