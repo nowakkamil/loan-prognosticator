@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const post_adress = 'http://127.0.0.1:5000/?bank_data_only';
+const post_adress_req = 'http://127.0.0.1:5000/?bank_data_only';
+const post_adress_opt = 'http://127.0.0.1:5000/';
 const req = 'req';
 const opt = 'opt';
 
@@ -39,6 +40,10 @@ class Answer {
 
   async submitAnswer(handler, optional) {
     let post_dict = this.getModeAnswer(optional)
+    let post_adress = post_adress_req
+    if(optional){
+      post_adress = post_adress_opt
+    }
     console.log(post_dict)
     await axios.post(post_adress, post_dict)
       .then(response => {
