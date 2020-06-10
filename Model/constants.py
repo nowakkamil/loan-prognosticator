@@ -4,6 +4,11 @@ categorical = 'categorical'
 all = 'all'
 bank_data = 'bank_data'
 
+strings = {
+    'bank_data': 'bank data',
+    'all': 'all'
+}
+
 attributes = {
     'bank_data': {
         'numerical': ["age", "balance"],
