@@ -1,12 +1,6 @@
 from pathlib import Path
 from sklearn.externals import joblib
-from sklearn.preprocessing import StandardScaler, LabelEncoder
-from sklearn.pipeline import Pipeline
-from sklearn.pipeline import FeatureUnion
-from data_frame_selector import DataFrameSelector
-from categorical_encoder import CategoricalEncoder
 
-import numpy as np
 import pandas as pd
 import constants
 
@@ -28,14 +22,10 @@ def test_trained_model__with_given_attibutes(attributes_type):
     # Create the pandas DataFrame
     df = pd.DataFrame(constants.test_data[attributes_type],
                       columns=constants.test_data[attributes_type].keys())
-    print(df)
 
     X_test = preprocess_pipeline.transform(df)
-    print(X_test)
 
     output = model.predict(X_test)
-    print(output)
-
     formatted_output = ["no" if x == 0 else "yes" for x in output]
     print(formatted_output)
 
