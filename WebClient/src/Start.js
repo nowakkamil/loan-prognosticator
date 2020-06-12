@@ -32,10 +32,11 @@ class Start extends Component {
     )
   }
 
-  renderButtons() {
+  renderIntro() {
     return (
       <React.Fragment>
-        <p>Welcome to Bank App</p>
+          <p className="intro-text">Welcome to</p>
+          <p className="intro-text">Term Deposit Prognosticator</p>
         <Button
           handler={this.handleButtonClick}
           optional={false}
@@ -51,11 +52,7 @@ class Start extends Component {
   render() {
     return (
       <div className="intro">
-        {this.state.value ?
-          this.renderButtons()
-          :
-          this.renderForm()
-        }
+        {this.state.value ? this.renderIntro() : this.renderForm()}
       </div>
     );
   }

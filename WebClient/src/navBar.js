@@ -8,7 +8,7 @@ const NavBar = () => (
       <figure className="app-header">
         <img src={logo} alt="logo" className="nav-bar" />
         <figcaption className="nav-bar-text">
-          Loan Prognosticator
+          Term Deposit Prognosticator
         </figcaption>
       </figure>
       <figure className="hexagon-wrapper last-item">
