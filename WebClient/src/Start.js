@@ -19,31 +19,31 @@ class Start extends Component {
     });
   }
 
-  renderForm(){
-    return(
+  renderForm() {
+    return (
       <React.Fragment>
         <p className="form-title">
           Fill all the fields below
         </p>
-        <Form 
+        <Form
           optional={this.state.optional}
           handler={this.handleButtonClick} />
       </React.Fragment>
     )
   }
 
-  renderButtons(){
-    return(
+  renderButtons() {
+    return (
       <React.Fragment>
         <p>Welcome to Bank App</p>
-        <Button 
-            handler={this.handleButtonClick}
-            optional={false}
-            text="Show Simple Form" />
-        <Button 
-            handler={this.handleButtonClick}
-            optional={true}
-            text='Show Advanced Form' />
+        <Button
+          handler={this.handleButtonClick}
+          optional={false}
+          text="Show Simple Form" />
+        <Button
+          handler={this.handleButtonClick}
+          optional={true}
+          text='Show Advanced Form' />
       </React.Fragment>
     )
   }
@@ -51,13 +51,14 @@ class Start extends Component {
   render() {
     return (
       <div className="intro">
-        {this.state.value ? 
+        {this.state.value ?
           this.renderButtons()
-          : 
+          :
           this.renderForm()
         }
       </div>
     );
   }
 }
+
 export default Start;

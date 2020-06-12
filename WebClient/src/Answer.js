@@ -8,31 +8,32 @@ const opt = 'opt';
 class Answer {
   constructor(props) {
     this.default_params = {
-      req:{
+      req: {
         'age': 'number',
-        'job': ['unknown', 'admin.','blue-collar','entrepreneur','housemaid','management','retired','self-employed','services','student','technician','unemployed'],
-        'marital': ['unknown','single','married', 'divorced'],
+        'job': ['unknown', 'admin.', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
+          'retired', 'self-employed', 'services', 'student', 'technician', 'unemployed'],
+        'marital': ['unknown', 'single', 'married', 'divorced'],
         'education': ['unknown', 'primary', 'secondary', 'tertiary'],
         'default': 'radio',
         'balance': 'number',
         'housing': 'radio',
         'loan': 'radio',
       },
-      opt:{
+      opt: {
         'contact': ['telephone', 'cellular'],
         'day': 'number',
         'month': ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'],
         'duration': 'number',
         'campaign': 'number',
-        'pdays':'number',
+        'pdays': 'number',
         'previous': 'number',
         'poutcome': ['nonexistent', 'success', 'failure']
       }
     };
-    this.parameters = {req:{}, opt:{}}
+    this.parameters = { req: {}, opt: {} }
     this.populateParameters(req)
     this.populateParameters(opt)
-    
+
     this.answer = null;
     this.submitAnswer = this.submitAnswer.bind(this)
     this.getModeAnswer = this.getModeAnswer.bind(this)
@@ -41,7 +42,7 @@ class Answer {
   async submitAnswer(handler, optional) {
     let post_dict = this.getModeAnswer(optional)
     let post_adress = post_adress_req
-    if(optional){
+    if (optional) {
       post_adress = post_adress_opt
     }
     console.log(post_dict)
@@ -54,25 +55,25 @@ class Answer {
     handler(this.answer.data.outcome)
   }
 
-  getModeAnswer(optional){
+  getModeAnswer(optional) {
     let dict = Object.assign({}, this.parameters[req]);
-    if(optional === true){
+    if (optional === true) {
       dict = Object.assign({}, this.parameters[req], this.parameters[opt]);
     }
     return dict
   }
 
-  populateParameters(mode){
+  populateParameters(mode) {
     var param_dict = this.default_params[mode]
 
     for (var key in param_dict) {
-      if (param_dict.hasOwnProperty(key)) {  
-        if (param_dict[key] === "number"){
+      if (param_dict.hasOwnProperty(key)) {
+        if (param_dict[key] === "number") {
           this.parameters[mode][key] = -1;
-        }else{
-          if(param_dict[key] === "radio"){
+        } else {
+          if (param_dict[key] === "radio") {
             this.parameters[mode][key] = 'unknown';
-          }else{
+          } else {
             this.parameters[mode][key] = param_dict[key][0];
           }
         }

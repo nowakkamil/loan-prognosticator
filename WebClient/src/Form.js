@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Switch from "react-switch";
 
 import Answer from './Answer';
-import Popup  from './Popup';
+import Popup from './Popup';
 
 const req = 'req';
 const opt = 'opt';
@@ -45,71 +45,71 @@ class Form extends Component {
 
   async handleSubmit(event) {
     event.preventDefault();
-    if(!this.checkAnswer()){
+    if (!this.checkAnswer()) {
       return
     }
     await this.state.answer.submitAnswer(this.togglePopup, this.state.optional);
   }
 
-  checkAnswer(){
+  checkAnswer() {
     const limit_dict = {
       "age": [18, 150],
       "pdays": [0, 999]
     }
     let answer_dict = this.state.answer.getModeAnswer(this.state.optional)
-    for (var key in limit_dict){
-      if(answer_dict[key] < limit_dict[key][0] || answer_dict[key] > limit_dict[key][1]){
+    for (var key in limit_dict) {
+      if (answer_dict[key] < limit_dict[key][0] || answer_dict[key] > limit_dict[key][1]) {
         alert("Wrong value in " + key)
         return false
       }
     }
 
-    for (var key1 in answer_dict){
-      if(answer_dict[key1] === -1 ||
-        answer_dict[key1] === "unknown"){
+    for (var key1 in answer_dict) {
+      if (answer_dict[key1] === -1 ||
+        answer_dict[key1] === "unknown") {
         alert("You have to fill all the fields")
         return false
-      }  
+      }
     }
     return true
   }
-  
-  changeOptional(_optional){
+
+  changeOptional(_optional) {
     this.setState({
       optional: _optional
     })
   }
 
-  reverseOptional(){
+  reverseOptional() {
     this.setState({
       optional: !this.state.optional
     })
   }
 
-  togglePopup(answer) {  
+  togglePopup(answer) {
     this._Submit.current.disabled = !this._Submit.current.disabled
-    this.setState({ 
-        showPopup: !this.state.showPopup  
-    }); 
+    this.setState({
+      showPopup: !this.state.showPopup
+    });
     this.Popup.current.changeSuccess(answer)
-  }  
+  }
 
-  chooseInput(key, value, mode){
-    if(value === 'number' || value === 'text'){
-      return(this.simpleInputChosen(key, value, mode))
-    }else{ 
-      if(Array.isArray(value)){
-        return(this.dropDownChosen(key, value, mode))
-      }else{
-        if(value === 'radio'){
-          return(this.radioButtonsChosen(key, value, mode))
+  chooseInput(key, value, mode) {
+    if (value === 'number' || value === 'text') {
+      return (this.simpleInputChosen(key, value, mode))
+    } else {
+      if (Array.isArray(value)) {
+        return (this.dropDownChosen(key, value, mode))
+      } else {
+        if (value === 'radio') {
+          return (this.radioButtonsChosen(key, value, mode))
         }
       }
     }
   }
 
-  simpleInputChosen(key, value, mode){
-    if(key === 'age'){
+  simpleInputChosen(key, value, mode) {
+    if (key === 'age') {
       return (
         <input
           className="column input"
@@ -128,32 +128,32 @@ class Form extends Component {
     )
   }
 
-  dropDownChosen(key, value, mode){
-        return (
-          <select 
-            onChange={(e) => this.handleChange(e, mode)}
-            className="column input"
-            ref={this._DropDown}
-            name={key}   
-          >
-            {value.map((elem, i) => {  
-              return (<option className="option" value={elem} key={elem} >{elem}</option>) 
-            })}
-          </select>
-        )
+  dropDownChosen(key, value, mode) {
+    return (
+      <select
+        onChange={(e) => this.handleChange(e, mode)}
+        className="column input"
+        ref={this._DropDown}
+        name={key}
+      >
+        {value.map((elem, i) => {
+          return (<option className="option" value={elem} key={elem} >{elem}</option>)
+        })}
+      </select>
+    )
   }
 
-  radioButtonsChosen(key, value, mode){
+  radioButtonsChosen(key, value, mode) {
     return (
-      <div className="column input" 
+      <div className="column input"
         onChange={(e) => this.handleChange(e, mode)} >
         <label>
           <input type="radio" value="yes" name={key} />
           <span>Yes </span>
         </label>
         <label>
-          <input type="radio" value="no" name={key}  />
-          <span>No </span> 
+          <input type="radio" value="no" name={key} />
+          <span>No </span>
         </label>
         <label>
           <input type="radio" value="unknown" name={key} defaultChecked />
@@ -163,21 +163,21 @@ class Form extends Component {
     )
   }
 
-  populateForm(mode){
+  populateForm(mode) {
     let param_dict = this.state.answer.default_params[mode]
 
-    return(
+    return (
       <React.Fragment>
         {Object.entries(param_dict).map(([key, value]) => (
-        <div
-          key={key}
-          className="row">
-          <p className="column label">
-            {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
-          </p>
-          {this.chooseInput(key, value, mode)}
-          <br />
-        </div>))}
+          <div
+            key={key}
+            className="row">
+            <p className="column label">
+              {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
+            </p>
+            {this.chooseInput(key, value, mode)}
+            <br />
+          </div>))}
       </React.Fragment>
     )
   }
@@ -185,28 +185,28 @@ class Form extends Component {
   render() {
     return (
       <div className="form-answer">
-        {this.state.showPopup ?  
-          <Popup 
+        {this.state.showPopup ?
+          <Popup
             ref={this.Popup}
-            closePopup={this.togglePopup} 
-          />  
-          : null  
+            closePopup={this.togglePopup}
+          />
+          : null
         }
-        
+
         <form className="form" onSubmit={this.handleSubmit}>
           {this.populateForm(req)}
           {this.state.optional ?
             this.populateForm(opt)
             : null
           }
-          <input className="submit" type="submit" value="Submit" ref={this._Submit}/>
+          <input className="submit" type="submit" value="Submit" ref={this._Submit} />
         </form>
 
         <br />
         <span>Switch between Simple/Advanced Form</span><br />
-        <Switch 
+        <Switch
           className="switch"
-          onChange={this.reverseOptional} 
+          onChange={this.reverseOptional}
           checked={this.state.optional} />
       </div>
     );
