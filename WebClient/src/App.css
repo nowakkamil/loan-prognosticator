@@ -69,6 +69,28 @@ body {
   margin: 0 auto;
 }
 
+.switch-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.switch-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.switch-container span {
+  margin: 7%;
+}
+
+.switcher-text {
+  margin: 5% 0;
+  text-align: center;
+}
+
 * {
   margin: 0;
   padding: 0;
