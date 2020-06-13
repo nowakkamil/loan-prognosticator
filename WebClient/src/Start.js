@@ -12,10 +12,10 @@ class Start extends Component {
     this.handleButtonClick = this.handleButtonClick.bind(this);
   }
 
-  handleButtonClick(_optional) {
+  handleButtonClick(optionalValue) {
     this.setState({
       value: !this.state.value,
-      optional: _optional
+      optional: optionalValue
     });
   }
 

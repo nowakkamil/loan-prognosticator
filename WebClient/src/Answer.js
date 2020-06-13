@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const post_adress_req = 'http://127.0.0.1:5000/?bank_data_only';
-const post_adress_opt = 'http://127.0.0.1:5000/';
+const postAdressRequired = 'http://127.0.0.1:5000/?bank_data_only';
+const postAdressOptional = 'http://127.0.0.1:5000/';
 const req = 'req';
 const opt = 'opt';
 
 class Answer {
-  constructor(props) {
-    this.default_params = {
+  constructor() {
+    this.defaultParams = {
       req: {
         'age': 'number',
         'job': ['admin.', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
@@ -40,13 +40,13 @@ class Answer {
   }
 
   async submitAnswer(handler, optional) {
-    let post_dict = this.getModeAnswer(optional)
-    let post_adress = post_adress_req
+    let postDictionary = this.getModeAnswer(optional)
+    let postAdress = postAdressRequired
     if (optional) {
-      post_adress = post_adress_opt
+      postAdress = postAdressOptional
     }
-    console.log(post_dict)
-    await axios.post(post_adress, post_dict)
+    console.log(postDictionary)
+    await axios.post(postAdress, postDictionary)
       .then(response => {
         console.log(response)
         this.answer = response
@@ -64,17 +64,17 @@ class Answer {
   }
 
   populateParameters(mode) {
-    var param_dict = this.default_params[mode]
+    var paramsDict = this.defaultParams[mode]
 
-    for (var key in param_dict) {
-      if (param_dict.hasOwnProperty(key)) {
-        if (param_dict[key] === "number") {
+    for (var key in paramsDict) {
+      if (paramsDict.hasOwnProperty(key)) {
+        if (paramsDict[key] === "number") {
           this.parameters[mode][key] = -1;
         } else {
-          if (param_dict[key] === "radio") {
+          if (paramsDict[key] === "radio") {
             this.parameters[mode][key] = 'unknown';
           } else {
-            this.parameters[mode][key] = param_dict[key][0];
+            this.parameters[mode][key] = paramsDict[key][0];
           }
         }
       }

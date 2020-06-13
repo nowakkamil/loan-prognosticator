@@ -14,9 +14,9 @@ class Popup extends Component {
     }
   }
 
-  changeSuccess(_success) {
+  changeSuccess(successValue) {
     this.setState({
-      success: _success
+      success: successValue
     })
   }
 
@@ -28,7 +28,6 @@ class Popup extends Component {
             ? <IconSuccess className="answer-icon success" />
             : <IconFailure className="answer-icon failure" />}
           <p className="popup-text">
-            {/* {`Model predicted that this person ${this.state.success ? "will" : "won't"} be interested in a term deposit`} */}
             Model predicted that this person
             <strong>
               {this.state.success ? " will " : " won't "}

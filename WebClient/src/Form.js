@@ -21,11 +21,10 @@ class Form extends Component {
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.togglePopup = this.togglePopup.bind(this)
-    this.changeOptional = this.changeOptional.bind(this)
     this.reverseOptional = this.reverseOptional.bind(this)
-    this.Popup = React.createRef()
-    this._Submit = React.createRef()
-    this._DropDown = React.createRef()
+    this.popup = React.createRef()
+    this.submit = React.createRef()
+    this.dropDown = React.createRef()
   }
 
   handleChange(event, mode) {
@@ -53,21 +52,21 @@ class Form extends Component {
   }
 
   checkAnswer() {
-    const limit_dict = {
+    const limitDict = {
       "age": [18, 150],
       "pdays": [0, 999]
     }
-    let answer_dict = this.state.answer.getModeAnswer(this.state.optional)
-    for (var key in limit_dict) {
-      if (answer_dict[key] < limit_dict[key][0] || answer_dict[key] > limit_dict[key][1]) {
+    let answerDict = this.state.answer.getModeAnswer(this.state.optional)
+    for (var key in limitDict) {
+      if (answerDict[key] < limitDict[key][0] || answerDict[key] > limitDict[key][1]) {
         alert("Wrong value in " + key)
         return false
       }
     }
 
-    for (var key1 in answer_dict) {
-      if (answer_dict[key1] === -1 ||
-        answer_dict[key1] === "unknown") {
+    for (var key1 in answerDict) {
+      if (answerDict[key1] === -1 ||
+        answerDict[key1] === "unknown") {
         alert("You have to fill all the fields")
         return false
       }
@@ -75,9 +74,9 @@ class Form extends Component {
     return true
   }
 
-  changeOptional(_optional) {
+  changeOptional(optionalValue) {
     this.setState({
-      optional: _optional
+      optional: optionalValue
     })
   }
 
@@ -88,11 +87,11 @@ class Form extends Component {
   }
 
   togglePopup(answer) {
-    this._Submit.current.disabled = !this._Submit.current.disabled
+    this.submit.current.disabled = !this.submit.current.disabled
     this.setState({
       showPopup: !this.state.showPopup
     });
-    this.Popup.current.changeSuccess(answer)
+    this.popup.current.changeSuccess(answer)
   }
 
   chooseInput(key, value, mode) {
@@ -130,7 +129,7 @@ class Form extends Component {
       <select
         onChange={(e) => this.handleChange(e, mode)}
         className="column input"
-        ref={this._DropDown}
+        ref={this.dropDown}
         name={key}
       >
         {value.map((elem, i) => {
@@ -141,11 +140,11 @@ class Form extends Component {
   }
 
   populateForm(mode) {
-    let param_dict = this.state.answer.default_params[mode]
+    let paramsDict = this.state.answer.defaultParams[mode]
 
     return (
       <React.Fragment>
-        {Object.entries(param_dict).map(([key, value]) => (
+        {Object.entries(paramsDict).map(([key, value]) => (
           <div
             key={key}
             className="row">
@@ -163,7 +162,7 @@ class Form extends Component {
       <div className="form-answer">
         {this.state.showPopup ?
           <Popup
-            ref={this.Popup}
+            ref={this.popup}
             closePopup={this.togglePopup}
           />
           : null
@@ -173,11 +172,10 @@ class Form extends Component {
           {this.populateForm(req)}
           {this.state.optional
             ? this.populateForm(opt)
-            : null
-          }
+            : null}
           <div className="buttton-wrapper">
             <Button
-              ref={this._Submit}
+              ref={this.submit}
               className="button"
               color="primary"
               variant="contained"

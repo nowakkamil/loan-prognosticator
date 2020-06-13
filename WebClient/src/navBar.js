@@ -12,7 +12,7 @@ const NavBar = () => (
         </figcaption>
       </figure>
       <figure className="hexagon-wrapper last-item">
-        <img src={hexagon} alt="logo_back" className="hexagon" />
+        <img src={hexagon} alt="logo" className="hexagon" />
       </figure>
     </header>
   </div>
