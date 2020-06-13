@@ -10,14 +10,14 @@ class Answer {
     this.default_params = {
       req: {
         'age': 'number',
-        'job': ['unknown', 'admin.', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
+        'job': ['admin.', 'blue-collar', 'entrepreneur', 'housemaid', 'management',
           'retired', 'self-employed', 'services', 'student', 'technician', 'unemployed'],
-        'marital': ['unknown', 'single', 'married', 'divorced'],
-        'education': ['unknown', 'primary', 'secondary', 'tertiary'],
-        'default': 'radio',
+        'marital': ['single', 'married', 'divorced'],
+        'education': ['primary', 'secondary', 'tertiary'],
+        'default': ['yes', 'no'],
         'balance': 'number',
-        'housing': 'radio',
-        'loan': 'radio',
+        'housing': ['yes', 'no'],
+        'loan': ['yes', 'no']
       },
       opt: {
         'contact': ['telephone', 'cellular'],

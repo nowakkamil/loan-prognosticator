@@ -42,7 +42,7 @@ body {
 }
 
 .form .column {
-  flex: 1;
+  flex: 1 1 10%;
 }
 
 .form .label {

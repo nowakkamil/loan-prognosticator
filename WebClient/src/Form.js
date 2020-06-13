@@ -100,10 +100,6 @@ class Form extends Component {
     } else {
       if (Array.isArray(value)) {
         return (this.dropDownChosen(key, value, mode))
-      } else {
-        if (value === 'radio') {
-          return (this.radioButtonsChosen(key, value, mode))
-        }
       }
     }
   }
@@ -140,26 +136,6 @@ class Form extends Component {
           return (<option className="option" value={elem} key={elem} >{elem}</option>)
         })}
       </select>
-    )
-  }
-
-  radioButtonsChosen(key, value, mode) {
-    return (
-      <div className="column input"
-        onChange={(e) => this.handleChange(e, mode)} >
-        <label>
-          <input type="radio" value="yes" name={key} />
-          <span>Yes </span>
-        </label>
-        <label>
-          <input type="radio" value="no" name={key} />
-          <span>No </span>
-        </label>
-        <label>
-          <input type="radio" value="unknown" name={key} defaultChecked />
-          <span>Unknown </span>
-        </label>
-      </div>
     )
   }
 
