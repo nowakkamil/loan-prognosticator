@@ -41,11 +41,11 @@ class Start extends Component {
         <CustomButton
           handler={this.handleButtonClick}
           optional={false}
-          text="Show Simple Form" />
+          text="Simple Form" />
         <CustomButton
           handler={this.handleButtonClick}
           optional={true}
-          text='Show Advanced Form' />
+          text='Advanced Form' />
       </React.Fragment>
     )
   }

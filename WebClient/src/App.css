@@ -19,8 +19,8 @@ body {
   align-items: center;
   justify-content: center;
   color: white;
-  padding-top: 10%;
-  padding-bottom: 10%;
+  padding-top: 7%;
+  padding-bottom: 7%;
 }
 
 .intro-text {
@@ -74,20 +74,29 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  z-index: 10000;
+  position: fixed;
+  bottom: 0;
+  left: 50vw;
+  width: 100vw;
+  background: #202020;
+  transform: translateX(-50vw);
 }
 
 .switch-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-bottom: 7px;
 }
 
 .switch-container span {
-  margin: 7%;
+  margin: 4%;
 }
 
 .switcher-text {
-  margin: 2% 0;
+  margin: 3px 0;
+  margin-left: -25px;
   text-align: center;
 }
 

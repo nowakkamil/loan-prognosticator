@@ -189,7 +189,9 @@ class Form extends Component {
           </div>
         </form>
         <div className="switch-wrapper">
-          <span className="switcher-text">Switch between Simple / Advanced Form</span>
+          <span className="switcher-text">
+            Form type
+          </span>
           <div className="switch-container">
             <span>Simple</span>
             <Switch
