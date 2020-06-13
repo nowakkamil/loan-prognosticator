@@ -155,3 +155,7 @@ body {
   z-index: 10000;
   background: linear-gradient(90deg, rgba(32, 32, 32, 1) 36%, rgba(255, 255, 255, 0) 100%);
 }
+
+.button {
+  margin: 10px !important;
+}

@@ -184,6 +184,9 @@ class Form extends Component {
             <span>Simple</span>
             <Switch
               className="switch"
+              uncheckedIcon={false}
+              checkedIcon={false}
+              onColor={'#1e90ff'}
               onChange={this.reverseOptional}
               checked={this.state.optional} />
             <span>Advanced</span>

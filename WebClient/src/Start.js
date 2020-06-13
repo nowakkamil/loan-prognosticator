@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Form from "./Form";
-import Button from "./Button";
+import CustomButton from "./CustomButton";
 
 class Start extends Component {
   constructor(props) {
@@ -37,11 +37,12 @@ class Start extends Component {
       <React.Fragment>
           <p className="intro-text">Welcome to</p>
           <p className="intro-text">Term Deposit Prognosticator</p>
-        <Button
+          <br />
+        <CustomButton
           handler={this.handleButtonClick}
           optional={false}
           text="Show Simple Form" />
-        <Button
+        <CustomButton
           handler={this.handleButtonClick}
           optional={true}
           text='Show Advanced Form' />
