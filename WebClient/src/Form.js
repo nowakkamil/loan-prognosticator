@@ -153,7 +153,6 @@ class Form extends Component {
               {key.charAt(0).toUpperCase() + key.slice(1) + ': '}
             </p>
             {this.chooseInput(key, value, mode)}
-            <br />
           </div>))}
       </React.Fragment>
     )

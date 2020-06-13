@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import './Popup.css';
-import success from './img/success.svg';
-import fail from './img/fail.svg'
+
+import { ReactComponent as IconSuccess } from './img/success.svg';
+import { ReactComponent as IconFailure } from './img/failure.svg';
+
+import Button from '@material-ui/core/Button';
 
 class Popup extends Component {
   constructor(props) {
@@ -20,13 +23,26 @@ class Popup extends Component {
   render() {
     return (
       <div className='popup'>
-        <div className='popup\_inner'>
-          {this.state.success ?
-            <img src={success} alt="answer" className="answer-icon" />
-            : <img src={fail} alt="answer" className="answer-icon" />
-          }
-          <br />
-          <button onClick={this.props.closePopup}>Close me</button>
+        <div className='popup-inner'>
+          {this.state.success
+            ? <IconSuccess className="answer-icon success" />
+            : <IconFailure className="answer-icon failure" />}
+          <p className="popup-text">
+            {/* {`Model predicted that this person ${this.state.success ? "will" : "won't"} be interested in a term deposit`} */}
+            Model predicted that this person
+            <strong>
+              {this.state.success ? " will " : " won't "}
+            </strong>
+            be interested in a term deposit
+          </p>
+          <Button
+            className="button button-popup"
+            color="primary"
+            variant="contained"
+            size="large"
+            onClick={this.props.closePopup}>
+            Fill again
+          </Button>
         </div>
       </div>
     );
