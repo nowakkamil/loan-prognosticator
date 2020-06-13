@@ -192,7 +192,7 @@ class Form extends Component {
             Form type
           </span>
           <div className="switch-container">
-            <span>Simple</span>
+            <span>Standard</span>
             <Switch
               className="switch"
               uncheckedIcon={false}
@@ -200,7 +200,7 @@ class Form extends Component {
               onColor={'#1e90ff'}
               onChange={this.reverseOptional}
               checked={this.state.optional} />
-            <span>Advanced</span>
+            <span>Extended</span>
           </div>
         </div>
       </div>
