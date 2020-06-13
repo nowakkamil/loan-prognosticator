@@ -87,7 +87,7 @@ body {
 }
 
 .switcher-text {
-  margin: 5% 0;
+  margin: 2% 0;
   text-align: center;
 }
 
@@ -158,4 +158,10 @@ body {
 
 .button {
   margin: 10px !important;
+}
+
+.buttton-wrapper {
+  padding: 12px;
+  justify-content: center;
+  display: flex;
 }

@@ -3,6 +3,7 @@ import Switch from "react-switch";
 
 import Answer from './Answer';
 import Popup from './Popup';
+import Button from '@material-ui/core/Button';
 
 const req = 'req';
 const opt = 'opt';
@@ -171,15 +172,24 @@ class Form extends Component {
 
         <form className="form" onSubmit={this.handleSubmit}>
           {this.populateForm(req)}
-          {this.state.optional ?
-            this.populateForm(opt)
+          {this.state.optional
+            ? this.populateForm(opt)
             : null
           }
-          <input className="submit" type="submit" value="Submit" ref={this._Submit} />
+          <div className="buttton-wrapper">
+            <Button
+              ref={this._Submit}
+              className="button"
+              color="primary"
+              variant="contained"
+              size="large"
+              onClick={this.handleSubmit}>
+              SUBMIT
+          </Button>
+          </div>
         </form>
-
         <div className="switch-wrapper">
-          <span className="switcher-text">Switch between Simple/Advanced Form</span>
+          <span className="switcher-text">Switch between Simple / Advanced Form</span>
           <div className="switch-container">
             <span>Simple</span>
             <Switch
